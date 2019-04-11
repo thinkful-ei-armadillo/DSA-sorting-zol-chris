@@ -91,6 +91,7 @@ function partition(array, start, end){
 
 // console.log(qSort(data));
 
+// 4. Implementing merge sort
 
 function mSort(array){
   if (array.length <= 1) {
@@ -132,7 +133,7 @@ function merge(left, right, array){
 // console.log(mSort(data)); 
 
 
-
+//5. Sorting a linked list using merge sort
 
 function sortLinkedList(list){
   if (!list.head){
@@ -142,9 +143,10 @@ function sortLinkedList(list){
   let array = []; 
   while (node !== null){
     array.push(node.value);
+    list.remove(node.value);
     node = node.next; 
   }
-  emptyLL(list);
+
   return mSort(array); 
 }
 
@@ -154,22 +156,113 @@ function recreateLL(array, list) {
   });
 }
 
-function emptyLL(list) {
-  if (!list.head){
-    return null; 
-  }
-  let node = list.head; 
-  while (node !== null){
-    node = node.next;  
-    list.remove(node.value);
-  }
-}
+// function display(list){
+//     if (!list.head){
+//         return null; 
+//       }
+//       let node = list.head; 
+//       let array = []; 
+//       while (node !== null){
+//         array.push(node.value);
+//         node = node.next; 
+//       }
+//       return `display ${array}`;
+// }
+
 
 function main(){
-  let array = [1, 23, 4, 5, 65, 25, 97];
-  const list = new linkedList(); 
-  array.forEach(num => {list.insertLast(num);});
-  console.log(recreateLL(sortLinkedList(list), list)); 
+    const list = new linkedList(); 
+    let array = [1, 23, 4, 5, 65, 25, 97];
+    array.forEach(num => {list.insertLast(num);});
+    
+    recreateLL(sortLinkedList(list), list); 
 }
 
-main(); 
+main();
+
+// 6. Bucket sort
+
+const numbers = [23, 4, 5, 1, 11, 14, 21, 30];
+// max = 30
+// min = 1
+
+function sort(arr){
+    let sorted = false;
+    while(!sorted){
+        sorted = true;
+        for(let i=0; i<arr.length - 1; i++){
+            let current = arr[i];
+            let next = arr[i+1];
+            if(current > next){
+                arr[i+1]=current;
+                arr[i]=next;
+                sorted = false;
+            }
+        }
+    }
+    return arr;
+}
+
+
+// function bucketSort(array, min, max) {
+
+//     var buckets = new Array(max - min + 1);
+  
+//     for(let i = 0; i < array.length; ++i) {
+//       buckets[array[i] - min] = (buckets[array[i] - min] | 0) + 1;
+//     }
+  
+//     var output = [];
+  
+//     for(let i = min; i <= max; ++i) {
+//       for(let j = 0; j < buckets[i - min]; ++j) {
+//         output.push(i);
+//       }
+//     }
+  
+//     return output;
+  
+//   }
+
+// console.log(sort(numbers, 1, 30));
+
+// 6. Sort in place
+
+function shuffleArray(array){
+   for(let i = 0; i<array.length; i++){
+       let ran = Math.floor(Math.random()*array.length);
+       swap(array, i, ran);
+   }
+   return array;
+}
+
+// console.log(shuffleArray(numbers));
+// console.log(shuffleArray(numbers));
+// console.log(shuffleArray(numbers));
+
+// 7. Sorting books
+
+function sortBooks(books, start=0, end=books.length){
+    if (start >= end) {
+        return books;
+    }
+    const middle = partition(books, start, end);
+    books = sortBooks(books, start, middle);
+    books = sortBooks(books, middle + 1, end);
+    return books;
+}
+
+function partition(array, start, end) {
+    const pivot = array[end - 1][0];
+    let j = start;
+    for (let i = start; i < end - 1; i++) {
+        if (array[i][0] <= pivot) {
+            swap(array, i, j);
+            j++;
+        }
+    }
+    swap(array, end-1, j);
+    return j;
+};
+
+
